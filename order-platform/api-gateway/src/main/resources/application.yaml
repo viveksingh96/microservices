@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+cloud:
+  gateway:
+    discovery:
+      locator:
+        enabled: true
+        lower-case-service-id: true
+
+    routes:
+      # Example: route product APIs to product-catalog-service
+      - id: product-catalog-service
+        uri: lb://product-catalog-service
+        predicates:
+          - Path=/products/**, /categories/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: productCatalogCB
+              fallbackUri: forward:/fallback/product
+
+      # Example: route order APIs to order-service
+      - id: order-service
+        uri: lb://order-service
+        predicates:
+          - Path=/orders/**
+        filters:
+          - name: CircuitBreaker
+            args:
+              name: orderServiceCB
+              fallbackUri: forward:/fallback/order
+
+  # Later we’ll configure OTEL exporting here
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
