@@ -33,6 +33,11 @@ cloud:
             args:
               name: orderServiceCB
               fallbackUri: forward:/fallback/order
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://<your-idanywhere-issuer>   # TODO: replace
 
   # Later we’ll configure OTEL exporting here
 
