@@ -33,4 +33,5 @@ public class ProductEntity {
 
     private Timestamp createAt;
     private Timestamp updatedAt;
+    private Boolean delete;
 }

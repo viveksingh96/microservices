@@ -21,9 +21,13 @@ public class ProductPriceHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity product;
+
     private BigDecimal oldPrice;
     private BigDecimal newPrice;
 
+    @Column(name = "changed_at")
     private Timestamp changedAt;
 }

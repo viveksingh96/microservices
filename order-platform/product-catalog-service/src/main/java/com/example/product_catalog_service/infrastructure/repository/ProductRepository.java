@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -29,6 +30,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Integer> 
     @Query(value = "SELECT * FROM product WHERE price BETWEEN :min AND :max", nativeQuery = true)
     List<ProductEntity> findProductsByPriceRange(@Param("min") BigDecimal min,
                                                  @Param("max") BigDecimal max);
+
+    @Modifying
+    @Query("UPDATE ProductEntity p SET p.deleted = true WHERE p.id = :id")
+    void softDelete(@Param("id") Integer id);
+    List<ProductEntity> findByCategoryIdAndDeletedFalse(Integer categoryId);
+    Page<ProductEntity> findByDeletedFalse(Pageable pageable);
+
 }
 
 

@@ -5,6 +5,12 @@ spring:
   application:
     name: product-catalog-service
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://idanywhere.example.com/realms/main
+
   datasource:
     url: jdbc:postgresql://localhost:5432/productdb
     username: postgres
